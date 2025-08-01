@@ -1,0 +1,13 @@
+package com.example.repository;
+
+import com.example.model.Product;
+import org.springframework.data.mongodb.repository.MongoRepository;
+
+import java.util.List;
+import java.util.Optional;
+
+public interface ProductRepository extends MongoRepository<Product, String> {
+    List<Product> findByTenantId(String tenantId);
+    Optional<Product> findByIdAndTenantId(String id, String tenantId);
+
+}
