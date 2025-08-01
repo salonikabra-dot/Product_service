@@ -15,10 +15,10 @@ public class Discount {
 
     @Id
     private String id;
-    private String type; // FLAT or PERCENT
+    private String type;
     private Double value;
-    private String appliesTo; // PRODUCT, CATEGORY, GLOBAL
-    private String targetId; // productId or categoryId
+    private String appliesTo;
+    private String targetId;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
     private Boolean isActive;

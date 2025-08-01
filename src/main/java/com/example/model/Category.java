@@ -16,6 +16,6 @@ public class Category {
     private String name;
     private String slug;
     private String description;
-    private String parentId; // null if top-level
+    private String parentId;
     private Boolean isActive;
 }
