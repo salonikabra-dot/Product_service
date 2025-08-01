@@ -17,7 +17,7 @@ public class Discount {
     private String id;
     private String type;
     private Double value;
-    private String appliesTo;
+    private String appliesTo;//test
     private String targetId;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
