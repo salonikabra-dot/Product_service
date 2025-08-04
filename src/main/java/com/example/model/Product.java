@@ -5,6 +5,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
@@ -34,15 +35,18 @@ public class Product {
     private Map<String, String> attributes;
     private List<String> tags;
     private Boolean isActive;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+//    private LocalDateTime createdAt;
+//    private LocalDateTime updatedAt;
+private Instant createdAt;
+    private Instant updatedAt;
+
 
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder
     public static class DiscountInfo {
-        private String type; // FLAT or PERCENT
+        private String type;
         private Double value;
     }
 }
