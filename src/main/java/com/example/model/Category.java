@@ -18,4 +18,7 @@ public class Category {
     private String description;
     private String parentId;
     private Boolean isActive;
+
+    private Boolean isDeleted = false;
+
 }

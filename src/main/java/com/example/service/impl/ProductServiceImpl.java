@@ -24,25 +24,30 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product create(Product product) {
-//        product.setCreatedAt(LocalDateTime.now());
-//        product.setUpdatedAt(LocalDateTime.now());
+
         product.setCreatedAt(ZonedDateTime.now(IST).toInstant());
         product.setUpdatedAt(ZonedDateTime.now(IST).toInstant());
 
         return productRepository.save(product);
     }
 
+
+
     @Override
     public List<Product> getAllByTenant(String tenantId) {
-        return productRepository.findByTenantId(tenantId);
+        return productRepository.findByTenantIdAndIsDeletedFalse(tenantId);
     }
+
+
+
 
 
     @Override
     public Product getById(String id, String tenantId) {
-        return productRepository.findByIdAndTenantId(id, tenantId)
+        return productRepository.findByIdAndTenantIdAndIsDeletedFalse(id, tenantId)
                 .orElseThrow(() -> new RuntimeException("Product not found"));
     }
+
 
     @Override
     public Product update(String id, Product updatedProduct, String tenantId) {
@@ -66,12 +71,17 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.save(existing);
     }
 
-    @Override
-    public void delete(String id, String tenantId) {
-        Product product = productRepository.findByIdAndTenantId(id, tenantId)
-                .orElseThrow(() -> new RuntimeException("Product not found"));
-        productRepository.delete(product);
-    }
+
+@Override
+public void delete(String id, String tenantId) {
+    Product product = productRepository.findByIdAndTenantIdAndIsDeletedFalse(id, tenantId)
+            .orElseThrow(() -> new RuntimeException("Product not found"));
+
+    product.setIsDeleted(true);
+    product.setUpdatedAt(ZonedDateTime.now(IST).toInstant());
+    productRepository.save(product);
+}
+
 
 
     public ProductResponseDTO convertToDto(Product product) {

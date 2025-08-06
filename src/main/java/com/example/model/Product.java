@@ -35,10 +35,12 @@ public class Product {
     private Map<String, String> attributes;
     private List<String> tags;
     private Boolean isActive;
-//    private LocalDateTime createdAt;
-//    private LocalDateTime updatedAt;
+
 private Instant createdAt;
     private Instant updatedAt;
+
+    private Boolean isDeleted = false;
+
 
 
     @Data

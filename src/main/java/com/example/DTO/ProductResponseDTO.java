@@ -26,6 +26,6 @@ public class ProductResponseDTO {
     private Map<String, String> attributes;
     private List<String> tags;
     private Boolean isActive;
-    private String createdAt;  // formatted as IST string
+    private String createdAt;
     private String updatedAt;
 }

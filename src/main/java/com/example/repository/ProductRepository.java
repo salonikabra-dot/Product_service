@@ -9,5 +9,9 @@ import java.util.Optional;
 public interface ProductRepository extends MongoRepository<Product, String> {
     List<Product> findByTenantId(String tenantId);
     Optional<Product> findByIdAndTenantId(String id, String tenantId);
+    List<Product> findByTenantIdAndIsDeletedFalse(String tenantId);
+    Optional<Product> findByIdAndTenantIdAndIsDeletedFalse(String id, String tenantId);
+
+
 
 }
