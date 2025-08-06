@@ -1,5 +1,6 @@
 package com.example.DTO;
 
+import com.example.model.Product;
 import lombok.Builder;
 import lombok.Data;
 
@@ -28,4 +29,9 @@ public class ProductResponseDTO {
     private Boolean isActive;
     private String createdAt;
     private String updatedAt;
+    private String imageUrl;
+
+
+
+
 }

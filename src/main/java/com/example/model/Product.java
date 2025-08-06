@@ -40,6 +40,8 @@ private Instant createdAt;
     private Instant updatedAt;
 
     private Boolean isDeleted = false;
+    private String imageUrl;
+
 
 
 

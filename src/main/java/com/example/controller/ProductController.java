@@ -5,9 +5,11 @@ import com.example.service.ProductService;
 import com.example.config.JwtUtil;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -28,15 +30,24 @@ public class ProductController {
         return jwtUtil.extractTenantId(token);
     }
 
-    @PostMapping
-    @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<ProductResponseDTO> create(@RequestBody Product product,
-                                                     @RequestHeader("Authorization") String authHeader) {
-        String tenantId = extractTenantId(authHeader);
-        product.setTenantId(tenantId);
-        Product saved = productService.create(product);
-        return ResponseEntity.ok(productService.convertToDto(saved));
-    }
+
+
+
+@PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+@PreAuthorize("hasAuthority('ADMIN')")
+public ResponseEntity<ProductResponseDTO> create(
+        @RequestPart("product") Product product,
+        @RequestPart(value = "image", required = false) MultipartFile imageFile,
+        @RequestHeader("Authorization") String authHeader) {
+
+    String tenantId = extractTenantId(authHeader);
+    product.setTenantId(tenantId);
+    Product saved = productService.create(product, imageFile);
+    return ResponseEntity.ok(productService.convertToDto(saved));
+}
+
+
+
 
     @GetMapping
     public ResponseEntity<List<ProductResponseDTO>> getAll(@RequestHeader("Authorization") String authHeader) {
@@ -56,15 +67,21 @@ public class ProductController {
         return ResponseEntity.ok(productService.convertToDto(product));
     }
 
-    @PutMapping("/{id}")
-    @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<ProductResponseDTO> update(@PathVariable String id,
-                                                     @RequestBody Product product,
-                                                     @RequestHeader("Authorization") String authHeader) {
-        String tenantId = extractTenantId(authHeader);
-        Product updated = productService.update(id, product, tenantId);
-        return ResponseEntity.ok(productService.convertToDto(updated));
-    }
+
+@PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+@PreAuthorize("hasAuthority('ADMIN')")
+public ResponseEntity<ProductResponseDTO> update(
+        @PathVariable String id,
+        @RequestPart("product") Product updatedProduct,
+        @RequestPart(value = "image", required = false) MultipartFile imageFile,
+        @RequestHeader("Authorization") String authHeader) {
+
+    String tenantId = extractTenantId(authHeader);
+    Product updated = productService.update(id, updatedProduct, tenantId, imageFile);
+    return ResponseEntity.ok(productService.convertToDto(updated));
+}
+
+
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")

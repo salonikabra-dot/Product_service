@@ -21,4 +21,7 @@ public class Category {
 
     private Boolean isDeleted = false;
 
+    private String imageUrl;
+
+
 }
