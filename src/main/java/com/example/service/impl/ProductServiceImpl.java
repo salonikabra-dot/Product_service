@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -80,7 +81,7 @@ public Product update(String id, Product updatedProduct, String tenantId, Multip
     existing.setCategoryId(updatedProduct.getCategoryId());
     existing.setSubCategoryId(updatedProduct.getSubCategoryId());
     existing.setPrice(updatedProduct.getPrice());
-    existing.setFinalPrice(updatedProduct.getFinalPrice());
+    //existing.setFinalPrice(updatedProduct.getFinalPrice());
     existing.setDiscount(updatedProduct.getDiscount());
     existing.setStock(updatedProduct.getStock());
     existing.setSku(updatedProduct.getSku());
@@ -118,30 +119,46 @@ public void delete(String id, String tenantId) {
 
 
 
-    public ProductResponseDTO convertToDto(Product product) {
-        return ProductResponseDTO.builder()
-                .id(product.getId())
-                .tenantId(product.getTenantId())
-                .name(product.getName())
-                .slug(product.getSlug())
-                .description(product.getDescription())
-                .brand(product.getBrand())
-                .categoryId(product.getCategoryId())
-                .subCategoryId(product.getSubCategoryId())
-                .price(product.getPrice())
-                .finalPrice(product.getFinalPrice())
-                .stock(product.getStock())
-                .sku(product.getSku())
-                .images(product.getImages())
-                .attributes(product.getAttributes())
-                .tags(product.getTags())
-                .isActive(product.getIsActive())
-                .createdAt(DateTimeUtils.toISTString(product.getCreatedAt()))
-                .updatedAt(DateTimeUtils.toISTString(product.getUpdatedAt()))
-                .imageUrl(product.getImageUrl())
+public ProductResponseDTO convertToDto(Product product) {
+    Double discount = (product.getDiscount() != null) ? product.getDiscount().getValue() : null;
 
-                .build();
+    BigDecimal discountPrice = (discount != null && product.getPrice() != null)
+            ? product.getPrice().subtract(
+            product.getPrice().multiply(BigDecimal.valueOf(discount)).divide(BigDecimal.valueOf(100))
+    )
+            : product.getPrice();
+
+    return ProductResponseDTO.builder()
+            .id(product.getId())
+            .tenantId(product.getTenantId())
+            .name(product.getName())
+            .slug(product.getSlug())
+            .description(product.getDescription())
+            .brand(product.getBrand())
+            .categoryId(product.getCategoryId())
+            .subCategoryId(product.getSubCategoryId())
+            .price(product.getPrice())
+            .stock(product.getStock())
+            .sku(product.getSku())
+            .images(product.getImages())
+            .attributes(product.getAttributes())
+            .tags(product.getTags())
+            .isActive(product.getIsActive())
+            .createdAt(DateTimeUtils.toISTString(product.getCreatedAt()))
+            .updatedAt(DateTimeUtils.toISTString(product.getUpdatedAt()))
+            .imageUrl(product.getImageUrl())
+            .discount(discount)
+            .discountPrice(discountPrice)
+            .build();
+}
+
+    public List<Product> getByCategory(String categoryId, String tenantId) {
+        return productRepository.findByCategoryIdAndTenantId(categoryId, tenantId);
     }
+
+
+
+
 
 
 }

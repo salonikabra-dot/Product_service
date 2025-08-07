@@ -91,4 +91,40 @@ public ResponseEntity<ProductResponseDTO> update(
         productService.delete(id, tenantId);
         return ResponseEntity.ok("Product deleted successfully");
     }
+
+    @PutMapping("/{id}/discount")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<ProductResponseDTO> setDiscount(
+            @PathVariable String id,
+            @RequestParam("type") String type,
+            @RequestParam("value") Double value,
+            @RequestHeader("Authorization") String authHeader) {
+
+        String tenantId = extractTenantId(authHeader);
+        Product product = productService.getById(id, tenantId);
+
+        product.setDiscount(Product.DiscountInfo.builder()
+                .type("PERCENTAGE")
+                .value(value)
+                .build());
+
+        Product updated = productService.update(id, product, tenantId, null);
+        return ResponseEntity.ok(productService.convertToDto(updated));
+    }
+
+
+    @GetMapping("/category/{categoryId}")
+    public ResponseEntity<List<ProductResponseDTO>> getByCategory(
+            @PathVariable String categoryId,
+            @RequestHeader("Authorization") String authHeader) {
+
+        String tenantId = extractTenantId(authHeader);
+        List<Product> products = productService.getByCategory(categoryId, tenantId);
+        List<ProductResponseDTO> response = products.stream()
+                .map(productService::convertToDto)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(response);
+    }
+
+
 }

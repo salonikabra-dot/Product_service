@@ -13,6 +13,10 @@ public interface ProductService {
     void delete(String id, String tenantId);
     ProductResponseDTO convertToDto(Product product);
     Product update(String id, Product updatedProduct, String tenantId, MultipartFile imageFile);
+    //List<Product> getAllByTenantAndCategory(String categoryId, String tenantId);
+    List<Product> getByCategory(String categoryId, String tenantId);
+
+
 
 
 

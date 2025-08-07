@@ -27,7 +27,7 @@ public class Product {
     private String categoryId;
     private String subCategoryId;
     private BigDecimal price;
-    private BigDecimal finalPrice;
+   // private BigDecimal finalPrice;
     private DiscountInfo discount;
     private Integer stock;
     private String sku;

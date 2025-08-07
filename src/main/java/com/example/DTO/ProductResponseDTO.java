@@ -20,7 +20,7 @@ public class ProductResponseDTO {
     private String categoryId;
     private String subCategoryId;
     private BigDecimal price;
-    private BigDecimal finalPrice;
+  //  private BigDecimal finalPrice;
     private Integer stock;
     private String sku;
     private List<String> images;
@@ -30,6 +30,9 @@ public class ProductResponseDTO {
     private String createdAt;
     private String updatedAt;
     private String imageUrl;
+    private Double discount;         // e.g., 10 for 10%
+    private BigDecimal discountPrice; // calculated price after discount
+
 
 
 
