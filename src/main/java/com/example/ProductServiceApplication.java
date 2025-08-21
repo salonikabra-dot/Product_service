@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 public class ProductServiceApplication {
 
 	public static void main(String[] args) {
+
 		SpringApplication.run(ProductServiceApplication.class, args);
 	}
 

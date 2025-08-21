@@ -10,6 +10,9 @@ public interface ProductService {
     Product create(Product product,MultipartFile imageFile);
     List<Product> getAllByTenant(String tenantId);
     Product getById(String id, String tenantId);
+    List<Product> getAllPublic();
+    Product getByIdPublic(String id);
+    List<Product> getByCategoryPublic(String categoryId);
     void delete(String id, String tenantId);
     ProductResponseDTO convertToDto(Product product);
     Product update(String id, Product updatedProduct, String tenantId, MultipartFile imageFile);

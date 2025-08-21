@@ -49,21 +49,34 @@ public ResponseEntity<ProductResponseDTO> create(
 
 
 
+
+
     @GetMapping
-    public ResponseEntity<List<ProductResponseDTO>> getAll(@RequestHeader("Authorization") String authHeader) {
-        String tenantId = extractTenantId(authHeader);
-        List<Product> products = productService.getAllByTenant(tenantId);
+    public ResponseEntity<List<ProductResponseDTO>> getAll() {
+        List<Product> products = productService.getAllPublic(); // fetch all products, no tenant/role filtering
         List<ProductResponseDTO> response = products.stream()
                 .map(productService::convertToDto)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(response);
     }
 
+
+
+
+
+
+
+
     @GetMapping("/{id}")
     public ResponseEntity<ProductResponseDTO> getById(@PathVariable String id,
-                                                      @RequestHeader("Authorization") String authHeader) {
-        String tenantId = extractTenantId(authHeader);
-        Product product = productService.getById(id, tenantId);
+                                                      @RequestHeader(value = "Authorization", required = false) String authHeader) {
+        Product product;
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            String tenantId = extractTenantId(authHeader);
+            product = productService.getById(id, tenantId);
+        } else {
+            product = productService.getByIdPublic(id);
+        }
         return ResponseEntity.ok(productService.convertToDto(product));
     }
 
@@ -116,10 +129,15 @@ public ResponseEntity<ProductResponseDTO> update(
     @GetMapping("/category/{categoryId}")
     public ResponseEntity<List<ProductResponseDTO>> getByCategory(
             @PathVariable String categoryId,
-            @RequestHeader("Authorization") String authHeader) {
+            @RequestHeader(value = "Authorization", required = false) String authHeader) {
 
-        String tenantId = extractTenantId(authHeader);
-        List<Product> products = productService.getByCategory(categoryId, tenantId);
+        List<Product> products;
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            String tenantId = extractTenantId(authHeader);
+            products = productService.getByCategory(categoryId, tenantId);
+        } else {
+            products = productService.getByCategoryPublic(categoryId);
+        }
         List<ProductResponseDTO> response = products.stream()
                 .map(productService::convertToDto)
                 .collect(Collectors.toList());

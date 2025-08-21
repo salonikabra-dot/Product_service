@@ -14,7 +14,7 @@
 	<groupId>com.ecom</groupId>
 	<artifactId>Ecommerce-App</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>Ecommerce-App</name>
+	<name>Product-Service</name>
 	<description>This is an Ecommerce Application</description>
 
 	<properties>
@@ -77,11 +77,7 @@
 			<version>2.0.2</version>
 		</dependency>
 
-		<!-- Thymeleaf (optional for UI, can remove if not needed) -->
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-thymeleaf</artifactId>
-		</dependency>
+
 
 		<!-- SendGrid (if you're sending emails) -->
 		<dependency>
